@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Tshirt store API
+  description: A course to write backend api of an ecommerce store selling tshirts
+  version: 0.1.9
+
+servers:
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: for local host - secure
+    variables:
+      version:
+        enum:
+          - v1
+          - v2
+        default: v1
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /dummy:
+    get:
+      tags:
+        - Home
+      summary: returns a greet message from LCO
+      responses:
+        200:
+          description: All good and success
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "mystring"
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+
+  /signup:
+    post:
+      tags:
+        - Object
+      summary: returns the signed up user details
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: returns an object saying the user details that saved into the database and also returns a token property.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      role:
+                        type: string
+                      photo:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          secure_url:
+                            type: string
+                      createdAt:
+                        type: string
+                      _id:
+                        type: string
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
